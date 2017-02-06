@@ -34,7 +34,6 @@ class Wrk(Process):
             'http://{}:{}'.format(self.host, self.port)]
 
     def report(self):
-        print(self.output)
         for line in self.output.splitlines():
             if not line.startswith(b'Requests/sec:'):
                 continue
