@@ -33,6 +33,9 @@ cli = PerfkitCli(help='This tool\'s subcommands are loaded from a '
 def process_pipeline(tools):
     tested, *testers = tools
 
+    if testers and isinstance(testers[0], list):
+        testers = testers[0]
+
     tested.start()
     if testers:
         tested.ready()
@@ -41,7 +44,7 @@ def process_pipeline(tools):
         tester.configure(tested)
         tester.start()
         tester.wait()
-        tester.report()
+        print(tester.report())
 
     tested.stop()
 

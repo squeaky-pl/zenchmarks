@@ -6,7 +6,7 @@ from perfkit.process import Process
 
 
 class Tcpkali(Process):
-    def __init__(self, binary):
+    def __init__(self, binary, time):
         if not binary:
             binary = 'vendor/tcpkali'
         self.binary = binary
@@ -14,7 +14,7 @@ class Tcpkali(Process):
         self.port = None
         self.workers = 1
         self.connections = 1
-        self.time = 10
+        self.time = time or 10
 
     def configure(self, tested):
         self.host, self.port = tested.psprocess.connections()[0].laddr
@@ -32,7 +32,7 @@ class Tcpkali(Process):
             line = line[len(b'Bandwidth per channel: '):]
             line = line.split()
             bandwidth = float(line[0][:-3])
-            print(bandwidth)
+            return bandwidth
 
     def __repr__(self):
         return '<Tcpkali {}:{} {} worker(s) {} connection(s)>'.format(
@@ -40,5 +40,10 @@ class Tcpkali(Process):
 
 @click.command()
 @click.option('--binary')
-def cli(binary):
-    return Tcpkali(binary)
+@click.option('--time', type=int)
+@click.option('--repeat', type=int)
+def cli(binary, time, repeat):
+    if repeat:
+        return [Tcpkali(binary, time) for _ in range(repeat)]
+    else:
+        return Tcpkali(binary, time)
