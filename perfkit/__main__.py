@@ -44,7 +44,10 @@ def process_pipeline(tools):
         tester.configure(tested)
         tester.start()
         tester.wait()
-        print(tester.report())
+        print('.', end='', flush=True)
+
+    print()
+    print(', '.join(str(t.report()) for t in testers))
 
     tested.stop()
 
