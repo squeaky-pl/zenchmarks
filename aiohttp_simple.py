@@ -41,8 +41,8 @@ Namespaces are one honking great idea -- let's do more of those!
 
 
 zens = dict(zip(
-    random.choices(string.ascii_letters, k=37),
-    random.choices(zen, k=19) + random.choices(zen, k=18)))
+    [random.choice(string.ascii_letters) for _ in range(37)],
+    [random.choice(zen) for _ in range(37)]))
 
 
 async def simple(request):
