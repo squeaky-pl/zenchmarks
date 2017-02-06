@@ -41,6 +41,7 @@ def process_pipeline(tools):
         tester.configure(tested)
         tester.start()
         tester.wait()
+        tester.report()
 
     tested.stop()
 

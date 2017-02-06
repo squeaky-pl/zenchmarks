@@ -25,6 +25,15 @@ class Tcpkali(Process):
             os.path.abspath(self.binary), '-w', str(self.workers), '-c', str(self.connections),
             '-T', str(self.time), '-m', 'x', '{}:{}'.format(self.host, self.port)]
 
+    def report(self):
+        for line in self.output.splitlines():
+            if not line.startswith(b'Bandwidth per channel:'):
+                continue
+            line = line[len(b'Bandwidth per channel: '):]
+            line = line.split()
+            bandwidth = float(line[0][:-3])
+            print(bandwidth)
+
     def __repr__(self):
         return '<Tcpkali {}:{} {} worker(s) {} connection(s)>'.format(
             self.host, self.port, self.workers, self.connections)
