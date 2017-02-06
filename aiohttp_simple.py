@@ -41,15 +41,15 @@ Namespaces are one honking great idea -- let's do more of those!
 
 
 zens = dict(zip(
-    random.choices(string.ascii_letters, k=19),
-    random.choices(zen, k=19)))
+    random.choices(string.ascii_letters, k=37),
+    random.choices(zen, k=19) + random.choices(zen, k=18)))
 
 
 async def simple(request):
     try:
         letter = request.url.query['q']
     except KeyError:
-        raise  web.HTTPBadRequest()
+        raise web.HTTPBadRequest()
 
     try:
         zenline = zens[letter]
