@@ -7,6 +7,8 @@ from perfkit.process import Process
 
 class Tcpkali(Process):
     def __init__(self, binary):
+        if not binary:
+            binary = 'vendor/tcpkali'
         self.binary = binary
         self.host = None
         self.port = None
@@ -28,6 +30,6 @@ class Tcpkali(Process):
             self.host, self.port, self.workers, self.connections)
 
 @click.command()
-@click.argument('binary')
+@click.option('--binary')
 def cli(binary):
     return Tcpkali(binary)
