@@ -2,16 +2,20 @@ import click
 import sys
 import psutil
 import time
+import os.path
 
 
 from perfkit.process import Process
 
 
 class Python(Process):
-    def __init__(self, script):
+    def __init__(self, binary, script):
         self.script = script
-        self.python = sys.executable
-        self.cmd = [self.python, script]
+        self.binary = binary or sys.executable
+
+    @property
+    def cmd(self):
+        return [os.path.abspath(self.binary), self.script]
 
     @property
     def psprocess(self):
@@ -32,5 +36,6 @@ class Python(Process):
 
 @click.command()
 @click.argument('script')
-def cli(script):
-    return Python(script)
+@click.option('--binary')
+def cli(binary, script):
+    return Python(binary, script)

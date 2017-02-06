@@ -3,6 +3,7 @@ import subprocess
 
 class Process:
     def start(self):
+        print('Running:', ' '.join(self.cmd))
         self.process = subprocess.Popen(self.cmd)
 
     def stop(self):
