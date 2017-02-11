@@ -6,10 +6,11 @@ from perfkit.process import Process
 
 
 class Tcpkali(Process):
-    def __init__(self, binary, time):
+    def __init__(self, binary, ws, time):
         if not binary:
             binary = 'vendor/tcpkali'
         self.binary = binary
+        self.ws = ws
         self.host = None
         self.port = None
         self.workers = 1
@@ -21,9 +22,13 @@ class Tcpkali(Process):
 
     @property
     def cmd(self):
-        return [
-            os.path.abspath(self.binary), '-w', str(self.workers), '-c', str(self.connections),
-            '-T', str(self.time), '-m', 'x', '{}:{}'.format(self.host, self.port)]
+        cmd = [
+            os.path.abspath(self.binary), '-w', str(self.workers),
+            '-c', str(self.connections),
+            '-T', str(self.time), '-m', 'x']
+        if self.ws:
+            cmd.append('--ws')
+        return [*cmd, '{}:{}'.format(self.host, self.port)]
 
     def report(self):
         for line in self.output.splitlines():
@@ -38,12 +43,14 @@ class Tcpkali(Process):
         return '<Tcpkali {}:{} {} worker(s) {} connection(s)>'.format(
             self.host, self.port, self.workers, self.connections)
 
+
 @click.command()
 @click.option('--binary')
 @click.option('--time', type=int)
 @click.option('--repeat', type=int)
-def cli(binary, time, repeat):
+@click.option('--ws', is_flag=True)
+def cli(binary, time, ws, repeat):
     if repeat:
-        return [Tcpkali(binary, time) for _ in range(repeat)]
+        return [Tcpkali(binary, ws, time) for _ in range(repeat)]
     else:
-        return Tcpkali(binary, time)
+        return Tcpkali(binary, ws, time)
