@@ -1,6 +1,8 @@
 import asyncio
 import signal
 
+from zenlines import zenlines
+
 
 class Echo(asyncio.Protocol):
     def connection_made(self, transport):
@@ -10,7 +12,14 @@ class Echo(asyncio.Protocol):
         pass
 
     def data_received(self, data):
-        self.transport.write(data)
+        data = data.strip().decode('ascii')
+
+        try:
+            response = zenlines[data] + '\n'
+        except KeyError:
+            response = 'Not Found\n'
+
+        self.transport.write(response.encode('ascii'))
 
 #import uvloop
 #loop = uvloop.new_event_loop()
