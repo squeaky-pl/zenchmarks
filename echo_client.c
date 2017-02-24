@@ -6,6 +6,7 @@
 
 uv_loop_t* loop;
 
+
 uv_buf_t buffers[] = {
   {.base = "A", .len = 1},
   {.base = "B", .len = 1},
@@ -36,7 +37,7 @@ uv_buf_t buffers[] = {
 };
 
 
-bool timeout;
+bool timeout = false;
 
 
 typedef struct {
@@ -105,7 +106,6 @@ void on_connect(uv_connect_t *req, int status) {
 void on_timer(uv_timer_t* req)
 {
   timeout = true;
-  printf("on_timer\n");
 }
 
 
@@ -131,7 +131,8 @@ int main(int argc, char* argv[])
   uv_tcp_init(loop, socket);
 
   uv_connect_t* connect = (uv_connect_t*)malloc(sizeof(uv_connect_t));
-  connect->data = malloc(sizeof(connection_t));
+  connection_t* connection = malloc(sizeof(connection_t));
+  connect->data = connection;
 
   struct sockaddr_in dest;
   uv_ip4_addr("127.0.0.1", 8080, &dest);
@@ -143,6 +144,8 @@ int main(int argc, char* argv[])
   uv_timer_start(&t_req, on_timer, duration * 1000, 0);
 
   uv_run(loop, UV_RUN_DEFAULT);
+
+  printf("Requests: %ld\n", connection->requests);
 
   return 0;
 }
