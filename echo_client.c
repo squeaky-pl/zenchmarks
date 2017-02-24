@@ -111,12 +111,16 @@ void on_timer(uv_timer_t* req)
 
 int main(int argc, char* argv[])
 {
-  int duration = 50;
+  int duration = 2;
+  int connection_num = 100;
   int opt;
   while((opt = getopt(argc, argv, "d:")) != -1) {
     switch (opt) {
     case 'd':
        duration = atoi(optarg);
+       break;
+    case 'c':
+       connection_num = atoi(optarg);
        break;
     default: /* '?' */
        fprintf(stderr, "Usage: %s [-d secs] \n",
@@ -127,17 +131,20 @@ int main(int argc, char* argv[])
 
   loop = uv_default_loop();
 
-  uv_tcp_t* socket = (uv_tcp_t*)malloc(sizeof(uv_tcp_t));
-  uv_tcp_init(loop, socket);
-
-  uv_connect_t* connect = (uv_connect_t*)malloc(sizeof(uv_connect_t));
-  connection_t* connection = malloc(sizeof(connection_t));
-  connect->data = connection;
-
   struct sockaddr_in dest;
   uv_ip4_addr("127.0.0.1", 8080, &dest);
 
-  uv_tcp_connect(connect, socket, (const struct sockaddr*)&dest, on_connect);
+  connection_t* connections = malloc(connection_num * sizeof(connection_t));
+
+  for(int i = 0; i < connection_num; i++) {
+    uv_tcp_t* socket = (uv_tcp_t*)malloc(sizeof(uv_tcp_t));
+    uv_tcp_init(loop, socket);
+
+    uv_connect_t* connect = (uv_connect_t*)malloc(sizeof(uv_connect_t));
+    connect->data = &connections[i];
+
+    uv_tcp_connect(connect, socket, (const struct sockaddr*)&dest, on_connect);
+  }
 
   uv_timer_t t_req;
   uv_timer_init(loop, &t_req);
@@ -145,7 +152,11 @@ int main(int argc, char* argv[])
 
   uv_run(loop, UV_RUN_DEFAULT);
 
-  printf("Requests: %ld\n", connection->requests);
+  unsigned long sum = 0;
+  for(int i = 0; i < connection_num; i++)
+    sum += connections[i].requests;
+
+  printf("Requests: %ld\n", sum);
 
   return 0;
 }
