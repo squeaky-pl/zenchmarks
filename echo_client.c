@@ -75,22 +75,11 @@ void alloc_cb(uv_handle_t* handle, size_t suggested_size, uv_buf_t* buf) {
 }
 
 
-void on_write(uv_write_t* req, int status)
-{
-  if (status) {
-    fprintf(stderr, "uv_write error: %s\n", uv_strerror(status));
-    return;
-  }
+void on_write(uv_write_t* req, int status) {
 }
 
 
 void on_connect(uv_connect_t *req, int status) {
-    if (status < 0) {
-        fprintf(stderr, "New connection error %s\n", uv_strerror(status));
-        // error!
-        return;
-    }
-
     uv_stream_t* stream = req->handle;
     connection_t* connection = (connection_t*)req->data;
     connection->stream = stream;
