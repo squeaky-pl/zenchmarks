@@ -1,13 +1,13 @@
 import sys
 import os
 import signal
-import functools
+
 
 sys.path.insert(
     0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'vendor')))
 
 
-from curio import run, tcp_server, gather, spawn, SignalSet
+from curio import run, tcp_server, spawn, SignalSet
 
 from zenlines import zenlines
 
