@@ -13,7 +13,7 @@ class Wrk(Process):
         self.port = None
         self.connections = 100
         self.threads = 1
-        self.time = time or 10
+        self.time = time or 2
         self.script = script
 
     def configure(self, tested):
