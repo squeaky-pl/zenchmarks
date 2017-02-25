@@ -2,12 +2,13 @@
 # Adapted from: https://github.com/njsmith/h11/blob/master/examples/curio-server.py
 
 
-import urllib.parse
 from itertools import count
 from socket import SHUT_WR
-from wsgiref.handlers import format_date_time
-import sys
 import os
+import sys
+import signal
+import urllib.parse
+from wsgiref.handlers import format_date_time
 
 
 sys.path.insert(
@@ -232,7 +233,15 @@ async def send_echo_response(wrapper, request):
 # Run the server
 ################################################################
 
+async def main():
+    server = await curio.spawn(curio.tcp_server('127.0.0.1', 8080, http_serve))
+
+    await curio.SignalSet(signal.SIGTERM, signal.SIGINT).wait()
+
+    await server.cancel()
+
+
 if __name__ == "__main__":
     kernel = curio.Kernel()
     print("Listening on http://localhost:8080")
-    kernel.run(curio.tcp_server("localhost", 8080, http_serve))
+    kernel.run(main(), shutdown=True)
