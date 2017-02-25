@@ -7,19 +7,27 @@ from zenlines import zenlines
 class Echo(asyncio.Protocol):
     def connection_made(self, transport):
         self.transport = transport
+        self.data = b''
 
     def connection_lost(self, exception):
         pass
 
     def data_received(self, data):
-        data = data.strip().decode('ascii')
+        self.data += data
 
-        try:
-            response = zenlines[data] + '\n'
-        except KeyError:
-            response = 'Not Found\n'
+        while 1:
+            lead, sep, rest = self.data.partition(b'\n')
+            if not sep:
+                break
 
-        self.transport.write(response.encode('ascii'))
+            self.data = rest
+
+            try:
+                response = zenlines[lead.decode('ascii')] + '\n'
+            except KeyError:
+                response = 'Not Found\n'
+
+            self.transport.write(response.encode('ascii'))
 
 #import uvloop
 #loop = uvloop.new_event_loop()
@@ -30,6 +38,7 @@ server = loop.run_until_complete(server_coro)
 print('Listening on 0.0.0.0:8080')
 
 loop.add_signal_handler(signal.SIGTERM, loop.stop)
+loop.add_signal_handler(signal.SIGINT, loop.stop)
 
 try:
     loop.run_forever()
