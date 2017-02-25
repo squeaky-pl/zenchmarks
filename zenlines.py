@@ -1,4 +1,3 @@
-import random
 import string
 
 
@@ -22,9 +21,14 @@ Although never is often better than *right* now.
 If the implementation is hard to explain, it's a bad idea.
 If the implementation is easy to explain, it may be a good idea.
 Namespaces are one honking great idea -- let's do more of those!
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
 """.strip().splitlines()
 
 
-zenlines = dict(zip(
-    [random.choice(string.ascii_letters) for _ in range(37)],
-    [random.choice(zen) for _ in range(37)]))
+zenlines = dict(zip(string.ascii_letters[::2], zen))
