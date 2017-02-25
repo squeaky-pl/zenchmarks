@@ -113,7 +113,7 @@ int main(int argc, char* argv[])
   int duration = 2;
   int connection_num = 100;
   int opt;
-  while((opt = getopt(argc, argv, "dc:")) != -1) {
+  while((opt = getopt(argc, argv, "d:c:")) != -1) {
     switch (opt) {
     case 'd':
        duration = atoi(optarg);
