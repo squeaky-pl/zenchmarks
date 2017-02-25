@@ -2,38 +2,39 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <string.h>
 
 
 uv_loop_t* loop;
 
 
 uv_buf_t buffers[] = {
-  {.base = "A", .len = 1},
-  {.base = "B", .len = 1},
-  {.base = "C", .len = 1},
-  {.base = "D", .len = 1},
-  {.base = "E", .len = 1},
-  {.base = "F", .len = 1},
-  {.base = "G", .len = 1},
-  {.base = "H", .len = 1},
-  {.base = "I", .len = 1},
-  {.base = "J", .len = 1},
-  {.base = "K", .len = 1},
-  {.base = "L", .len = 1},
-  {.base = "M", .len = 1},
-  {.base = "N", .len = 1},
-  {.base = "O", .len = 1},
-  {.base = "P", .len = 1},
-  {.base = "Q", .len = 1},
-  {.base = "R", .len = 1},
-  {.base = "S", .len = 1},
-  {.base = "T", .len = 1},
-  {.base = "U", .len = 1},
-  {.base = "V", .len = 1},
-  {.base = "W", .len = 1},
-  {.base = "X", .len = 1},
-  {.base = "Y", .len = 1},
-  {.base = "Z", .len = 1}
+  {.base = "A\n", .len = 2},
+  {.base = "B\n", .len = 2},
+  {.base = "C\n", .len = 2},
+  {.base = "D\n", .len = 2},
+  {.base = "E\n", .len = 2},
+  {.base = "F\n", .len = 2},
+  {.base = "G\n", .len = 2},
+  {.base = "H\n", .len = 2},
+  {.base = "I\n", .len = 2},
+  {.base = "J\n", .len = 2},
+  {.base = "K\n", .len = 2},
+  {.base = "L\n", .len = 2},
+  {.base = "M\n", .len = 2},
+  {.base = "N\n", .len = 2},
+  {.base = "O\n", .len = 2},
+  {.base = "P\n", .len = 2},
+  {.base = "Q\n", .len = 2},
+  {.base = "R\n", .len = 2},
+  {.base = "S\n", .len = 2},
+  {.base = "T\n", .len = 2},
+  {.base = "U\n", .len = 2},
+  {.base = "V\n", .len = 2},
+  {.base = "W\n", .len = 2},
+  {.base = "X\n", .len = 2},
+  {.base = "Y\n", .len = 2},
+  {.base = "Z\n", .len = 2}
 };
 
 
@@ -55,16 +56,25 @@ void on_write(uv_write_t* req, int status);
 void on_read(uv_stream_t* stream, ssize_t nread, const uv_buf_t* buf)
 {
   connection_t* connection = (connection_t*)stream->data;
-  connection->requests++;
-  connection->idx++;
-  if(connection->idx == 26)
-    connection->idx = 0;
 
-  if(!timeout) {
-    uv_write(&connection->w_req, stream, &buffers[connection->idx], 1, on_write);
-  } else {
-    uv_read_stop(stream);
+  int requests = 0;
+  for(char* ch = buf->base; ;requests++) {
+    ch = memchr(ch, '\n', nread - (ch - buf->base));
+    if(!ch)
+      break;
+    ch++;
   }
+
+  connection->requests += requests;
+  connection->idx += requests;
+  while(connection->idx > 25)
+    connection->idx -= 25;
+
+  if(!timeout)
+    uv_write(
+      &connection->w_req, stream, &buffers[connection->idx], 1, on_write);
+  else
+    uv_read_stop(stream);
 }
 
 
