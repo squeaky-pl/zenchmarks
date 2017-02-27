@@ -1,6 +1,7 @@
 import sys
 import os.path
 import urllib.parse
+import signal
 
 sys.path.insert(
     0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'vendor')))
@@ -9,6 +10,7 @@ sys.path.insert(
 from gevent.pywsgi import WSGIServer
 
 from zenlines import zenlines
+import gevent.signal
 
 
 def application(env, start_response):
@@ -48,4 +50,14 @@ def application(env, start_response):
     return [zenline.encode('utf-8')]
 
 
-WSGIServer(('127.0.0.1', 8080), application).serve_forever()
+server = WSGIServer(('127.0.0.1', 8080), application, log=None)
+
+
+def stop_server(signal, frame):
+    server.stop()
+
+
+gevent.signal.signal(signal.SIGTERM, stop_server)
+gevent.signal.signal(signal.SIGINT, stop_server)
+
+server.serve_forever()
