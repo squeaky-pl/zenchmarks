@@ -1,3 +1,11 @@
+import sys
+import os
+
+
+sys.path.insert(
+    0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'vendor')))
+
+
 from twisted.web.http import NOT_FOUND, BAD_REQUEST
 
 from klein import run, route
@@ -19,4 +27,4 @@ def resource(request):
 
     return zenline
 
-run("localhost", 8080)
+run("localhost", 8080, logFile=open(os.devnull, "w"))
