@@ -43,4 +43,6 @@ python3 -m perfkit python --binary ~/pypy-c-jit-90326-88ef793308eb-linux64/bin/p
 python3 -m perfkit python zenhttp_tornado.py wrk --script zenhttp.lua --repeat 10
 python3 -m perfkit python --binary ~/pypy-c-jit-90326-88ef793308eb-linux64/bin/pypy3 zenhttp_tornado.py wrk --script zenhttp.lua --repeat 10
 
+python3 -m perfkit python zenhttp_klein.py wrk --script zenhttp.lua --repeat 10
+python3 -m perfkit python --binary ~/pypy-c-jit-90326-88ef793308eb-linux64/bin/pypy3  zenhttp_klein.py wrk --script zenhttp.lua --repeat 10
 ```
