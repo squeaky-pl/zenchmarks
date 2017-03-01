@@ -10,6 +10,13 @@ build PyPy preview yourself. CPython 3.5 installed and PyPy build from 3.5 night
 Everything else is vendored in the repository.
 
 
+Results
+-------
+
+![Graphs](graphs.png)
+
+![Table](table.png)
+
 Reproducing
 -----------
 
