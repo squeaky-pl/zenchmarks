@@ -31,17 +31,18 @@ The exact commands are given below:
 
 ```
 
+pypy_nightly=~/pypy-c-jit-90326-88ef793308eb-linux64/bin/pypy3
 python3 -m perfkit python zenhttp_aiohttp.py wrk --script zenhttp.lua --repeat 10
-python3 -m perfkit python --binary ~/pypy-c-jit-90326-88ef793308eb-linux64/bin/pypy3 zenhttp_aiohttp.py wrk --script zenhttp.lua --repeat 10
+python3 -m perfkit python --binary "$pypy_nightly" zenhttp_aiohttp.py wrk --script zenhttp.lua --repeat 10
 
 python3 -m perfkit python zenhttp_curio_h11.py wrk --script zenhttp.lua --repeat 10
-python3 -m perfkit python --binary ~/pypy-c-jit-90326-88ef793308eb-linux64/bin/pypy3 zenhttp_curio_h11.py wrk --script zenhttp.lua --repeat 10
+python3 -m perfkit python --binary "$pypy_nightly" zenhttp_curio_h11.py wrk --script zenhttp.lua --repeat 10
 
 python3 -m perfkit python zenhttp_gevent.py wrk --script zenhttp.lua --repeat 10
-python3 -m perfkit python --binary ~/pypy-c-jit-90326-88ef793308eb-linux64/bin/pypy3 zenhttp_gevent.py wrk --script zenhttp.lua --repeat 10
+python3 -m perfkit python --binary "$pypy_nightly" zenhttp_gevent.py wrk --script zenhttp.lua --repeat 10
 
 python3 -m perfkit python zenhttp_tornado.py wrk --script zenhttp.lua --repeat 10
-python3 -m perfkit python --binary ~/pypy-c-jit-90326-88ef793308eb-linux64/bin/pypy3 zenhttp_tornado.py wrk --script zenhttp.lua --repeat 10
+python3 -m perfkit python --binary "$pypy_nightly" zenhttp_tornado.py wrk --script zenhttp.lua --repeat 10
 
 python3 -m perfkit python zenhttp_klein.py wrk --script zenhttp.lua --repeat 10
 python3 -m perfkit python --binary ~/pypy-c-jit-90326-88ef793308eb-linux64/bin/pypy3  zenhttp_klein.py wrk --script zenhttp.lua --repeat 10
