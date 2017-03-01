@@ -1,0 +1,18 @@
+
+Hello everyone.
+
+Since `Mozilla announced funding,`_ we've been working quite hard on delivering you a working Python 3.5.
+
+To cut the long story short, we have some benchmarks done by Paweł Piotr Przeradowski @squeaky_pl for an HTTP workload on a  asynchronous IO libraries, namely the relatively new asyncio and curio libraries and the battle-tested tornado, gevent and Twisted libraries. To see the benchmarks check out https://github.com/squeaky-pl/zenchmarks and the intructions for reproducing can be found inside README.md in the repository. Raw results can be obtained from https://github.com/squeaky-pl/zenchmarks/blob/master/results.csv.
+
+The purpose of presented benchmarks is showing that upcoming PyPy release is already working with unmodified code that runs on CPython 3.5. PyPy also manages to make them run significantly faster.
+
+The benchmarks consist of HTTP servers implemented on the top of mentioned libraries. All the servers are single-threaded relaying on underlying event loops to provide concurrency. Access logging was disabled to exclude terminal I/O from the results. The view code consists of a lookup in a dictionary mapping ASCII letters to verses from the famous Zen of Python. If a verse is found the view returns it, otherwise 404 Not Found response is served. The 400 Bad Request and 500 Internal Server Error cases are also handled.
+
+The workload was generated with wrk[https://github.com/wg/wrk] HTTP benchmarking tool. It is run with one thread opening up to 100 concurrent connections for 2 seconds and repeated 1010 times to get consecutive measures. There is a Lua script provided[https://github.com/squeaky-pl/zenchmarks/blob/master/zenhttp.lua] that instructs wrk to continously send 24 different requests that hit different execution paths (200, 404, 400) in the view code. Also it is worth noting that wrk will only count 200 responses as succesful so the actual request per second throughput is higher.
+
+For your convenience all the used libraries versions are vendored[https://github.com/squeaky-pl/zenchmarks/tree/master/vendor] into the benchmark repository. There is also a precompiled portable version of wrk provided that should run on any reasonably recent (10 year old or newer) Linux x86_64 distribution. The benchmark was performed on a public cloud scaleway[https://www.scaleway.com/] x6 x86_64 server launched in Paris data center. The server was running Ubuntu 16.04.01 LTS and reported Intel(R) Xeon(R) CPU D-1531 @ 2.20GHz CPU. CPython 3.5.2 (shipped by default in Ubuntu) was benchmarked against a pypy-c-jit-90326-88ef793308eb-linux64[http://buildbot.pypy.org/nightly/py3.5/pypy-c-jit-90326-88ef793308eb-linux64.tar.bz2] snapshot of 3.5 compatibility branch of PyPy.
+
+[benchmark graphs go here]
+
+Overall
