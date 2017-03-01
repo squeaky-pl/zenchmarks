@@ -3,7 +3,7 @@ Hello everyone.
 
 Since `Mozilla announced funding,`_ we've been working quite hard on delivering you a working Python 3.5.
 
-To cut a long story short, we have some benchmarks done by Paweł Piotr Przeradowski @squeaky_pl for an HTTP workload on a number of asynchronous IO libraries -- the relatively new asyncio and curio libraries, and the battle-tested tornado, gevent and Twisted libraries. To see the benchmarks, check out https://github.com/squeaky-pl/zenchmarks and the instructions for reproducing can be found inside README.md in the repository. Raw results can be obtained from https://github.com/squeaky-pl/zenchmarks/blob/master/results.csv.
+To cut a long story short, we have some benchmarks done by Paweł Piotr Przeradowski @squeaky_pl for an HTTP workload on a number of asynchronous IO libraries -- the relatively new asyncio and curio libraries, and the battle-tested tornado, gevent and Twisted libraries. To see the benchmarks, check out https://github.com/squeaky-pl/zenchmarks, which also contains a README.md with instructions for reproducing the results. Raw results can be obtained directly from https://github.com/squeaky-pl/zenchmarks/blob/master/results.csv.
 
 The purpose of the presented benchmarks is to show that the upcoming PyPy release is already working with unmodified code that runs on CPython 3.5. PyPy also already manages to make them run significantly faster.
 
