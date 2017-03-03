@@ -1,6 +1,6 @@
 # Asynchronous HTTP libraries benchmark for upcoming PyPy release
 
-For the accompanying blog post please see ...
+For the accompanying blog post please see https://morepypy.blogspot.com.br/2017/03/async-http-benchmarks-on-pypy3.html
 
 Prerequisites
 -------------
