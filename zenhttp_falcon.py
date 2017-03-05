@@ -34,3 +34,6 @@ class ZenResource(object):
 app = falcon.API()
 zen = ZenResource()
 app.add_route('/', zen)
+
+if __name__ == '__main__':
+    os.system('PYTHONPATH=vendor {} -m gunicorn.app.wsgiapp -b 127.0.0.1:8080 zenhttp_falcon:app'.format(sys.executable))
