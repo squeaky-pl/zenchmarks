@@ -12,6 +12,7 @@ class Wrk(Process):
         self.host = None
         self.port = None
         self.connections = 100
+        self.rate = 100
         self.threads = 1
         self.time = time or 2
         self.script = script
@@ -22,6 +23,7 @@ class Wrk(Process):
     @property
     def cmd(self):
         options = [
+            "-R", str(self.rate),
             '-c', str(self.connections),
             '-t', str(self.threads),
             '-d', str(self.time)
